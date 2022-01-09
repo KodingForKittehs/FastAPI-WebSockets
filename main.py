@@ -1,7 +1,3 @@
-# https://websockets.readthedocs.io/en/stable/
-
-#import asyncio
-#import websockets
 import uvicorn
 from fastapi import FastAPI, WebSocket
 from fastapi.responses import HTMLResponse
@@ -42,14 +38,6 @@ html = """
 
 app = FastAPI()
 
-#async def echo(websocket):
-#    async for message in websocket:
-#        await websocket.send(message)
-
-#async def main():
-#    async with websockets.serve(echo, "0.0.0.0", 8765):
-#        await asyncio.Future()  # run forever
-
 @app.get("/")
 async def get():
     return HTMLResponse(html)
@@ -63,4 +51,3 @@ async def websocket_endpoint(websocket: WebSocket):
         await websocket.send_text(f"Message text was: {data}")
 
 uvicorn.run(app, host="0.0.0.0", port=5000, log_level="info")
-#asyncio.run(main())
