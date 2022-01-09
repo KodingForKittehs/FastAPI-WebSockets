@@ -1,3 +1,4 @@
+import logging
 import uvicorn
 from fastapi import FastAPI, WebSocket
 from fastapi.responses import HTMLResponse
@@ -42,12 +43,16 @@ app = FastAPI()
 async def get():
     return HTMLResponse(html)
 
-
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
+    logging.info(websocket)
     await websocket.accept()
+    logging.info(f'accept() {websocket}')
     while True:
         data = await websocket.receive_text()
-        await websocket.send_text(f"Message text was: {data}")
+        logging.info(f'receive_text() {data} {websocket}')
+        result = await websocket.send_text(f"Message text was: {data}")
+        logging.info(f'send_text() {result} {websocket}')
 
+logging.basicConfig(level=logging.INFO)
 uvicorn.run(app, host="0.0.0.0", port=5000, log_level="info")
